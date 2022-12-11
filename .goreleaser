@@ -21,7 +21,7 @@ brews:
     homepage: "https://github.com/mwei2509/strapp"
     tap:
       owner: mwei2509
-      name: homebrew-mwei2509
+      name: homebrew-taps
     commit_author:
       name: mwei2509
       email: m2dl89@gmail.com
