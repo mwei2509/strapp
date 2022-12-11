@@ -1,11 +1,14 @@
 package cmd
 
 import (
-	app "github.com/mwei2509/strapp/pkg/app"
+	"log"
+
+	"github.com/mwei2509/strapp/pkg/app"
 	"github.com/spf13/cobra"
 )
 
-var appTypeFlags []string
+var flags app.Flag
+var languageFlag string
 
 // appCreateCommand represents the app:create command
 var appCreateCommand = &cobra.Command{
@@ -20,16 +23,17 @@ Examples:
   strapp app:create my-app --type api --type web
 `,
 	Args: cobra.MatchAll(cobra.ExactArgs(1)),
-	RunE: func(cmd *cobra.Command, args []string) error {
-		if err := app.Do(args[0], appTypeFlags); err != nil {
-			return err
+	Run: func(cmd *cobra.Command, args []string) {
+		if err := app.Do(args[0], flags); err != nil {
+			log.Fatal(err)
 		}
-		return nil
+		log.Println("Success!")
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(appCreateCommand)
 	// flags
-	appCreateCommand.Flags().StringArrayVarP(&appTypeFlags, "type", "t", []string{}, "testing")
+	appCreateCommand.Flags().StringArrayVarP(&flags.Type, "type", "t", app.FlagDefaults.Type, "type of app, e.g. api, web.  Use multiple for monorepo setup")
+	appCreateCommand.Flags().StringVarP(&flags.Language, "language", "l", app.FlagDefaults.Language, "language")
 }
