@@ -16,7 +16,8 @@ universal_binaries:
   - replace: true
 
 brews:
-  - name: strapp
+  - #
+    name: strapp
     homepage: "https://github.com/mwei2509/strapp-cli"
     tap:
       owner: mwei2509
