@@ -33,7 +33,7 @@ func init() {
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
 
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.strapp-cli.yaml)")
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.strapp.yaml)")
 }
 
 // initConfig reads in config file and ENV variables if set.
@@ -46,10 +46,10 @@ func initConfig() {
 		home, err := os.UserHomeDir()
 		cobra.CheckErr(err)
 
-		// Search config in home directory with name ".strapp-cli" (without extension).
+		// Search config in home directory with name ".strapp" (without extension).
 		viper.AddConfigPath(home)
 		viper.SetConfigType("yaml")
-		viper.SetConfigName(".strapp-cli")
+		viper.SetConfigName(".strapp")
 	}
 
 	viper.AutomaticEnv() // read in environment variables that match

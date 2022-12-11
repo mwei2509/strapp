@@ -1,4 +1,4 @@
-module github.com/mwei2509/strapp-cli
+module github.com/mwei2509/strapp
 
 go 1.19
 

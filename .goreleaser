@@ -1,5 +1,5 @@
 builds:
-  - binary: strapp-cli
+  - binary: strapp 
     goos:
       - darwin
       - linux
@@ -17,8 +17,8 @@ universal_binaries:
 
 brews:
   -
-    name: strapp-cli
-    homepage: "https://github.com/mwei2509/strapp-cli"
+    name: strapp
+    homepage: "https://github.com/mwei2509/strapp"
     tap:
       owner: mwei2509
       name: homebrew-mwei2509

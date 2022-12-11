@@ -6,7 +6,7 @@ package cmd
 import (
 	"fmt"
 
-	tools "github.com/mwei2509/strapp-cli/pkg/tools"
+	tools "github.com/mwei2509/strapp/pkg/tools"
 	"github.com/spf13/cobra"
 )
 

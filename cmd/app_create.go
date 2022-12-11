@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	app "github.com/mwei2509/strapp-cli/pkg/app"
+	app "github.com/mwei2509/strapp/pkg/app"
 	"github.com/spf13/cobra"
 )
 
