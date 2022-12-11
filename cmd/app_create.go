@@ -31,5 +31,5 @@ Examples:
 func init() {
 	rootCmd.AddCommand(appCreateCommand)
 	// flags
-	appCreateCommand.Flags().StringArrayVarP(&appTypeFlags, "type", "-t", []string{}, "testing")
+	appCreateCommand.Flags().StringArrayVarP(&appTypeFlags, "type", "t", []string{}, "testing")
 }
