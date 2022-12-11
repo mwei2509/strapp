@@ -18,12 +18,15 @@ universal_binaries:
   - replace: true
 
 brews:
-  - #
+  -
     name: strapp
-    homepage: "https://github.com/mwei2509/strapp"
+    homepage: "https://github.com/mwei2509/strapp-cli"
     tap:
       owner: mwei2509
       name: homebrew-mwei2509
+    commit_author:
+      name: mwei2509
+      email: m2dl89@gmail.com
 
 checksum:
-  name_template: "checksums.txt"
+  name_template: 'checksums.txt'
