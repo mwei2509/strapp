@@ -8,6 +8,8 @@ builds:
       - arm64
     env:
       - CGO_ENABLED=0
+    flags:
+      - -mod=vendor
 
 release:
   prerelease: auto
@@ -18,13 +20,10 @@ universal_binaries:
 brews:
   - #
     name: strapp
-    homepage: "https://github.com/mwei2509/strapp-cli"
+    homepage: "https://github.com/mwei2509/strapp"
     tap:
       owner: mwei2509
       name: homebrew-mwei2509
-    commit_author:
-      name: mwei2509
-      email: m2dl89@gmail.com
 
 checksum:
   name_template: "checksums.txt"
