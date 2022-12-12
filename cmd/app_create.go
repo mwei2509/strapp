@@ -1,8 +1,7 @@
 package cmd
 
 import (
-	"log"
-
+	"github.com/mwei2509/strapp/pkg"
 	"github.com/mwei2509/strapp/pkg/app"
 	"github.com/spf13/cobra"
 )
@@ -24,10 +23,11 @@ Examples:
 `,
 	Args: cobra.MatchAll(cobra.ExactArgs(1)),
 	Run: func(cmd *cobra.Command, args []string) {
-		if err := app.Do(args[0], flags); err != nil {
-			log.Fatal(err)
+		if err := pkg.CreateApp(args[0], flags); err != nil {
+			Fatal(err)
+			return
 		}
-		log.Println("Success!")
+		Log("Success!")
 	},
 }
 
@@ -36,4 +36,5 @@ func init() {
 	// flags
 	appCreateCommand.Flags().StringArrayVarP(&flags.Type, "type", "t", app.FlagDefaults.Type, "type of app, e.g. api, web.  Use multiple for monorepo setup")
 	appCreateCommand.Flags().StringVarP(&flags.Language, "language", "l", app.FlagDefaults.Language, "language")
+	appCreateCommand.Flags().StringVarP(&flags.Framework, "framework", "f", app.FlagDefaults.Framework, "framework")
 }
