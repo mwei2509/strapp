@@ -11,7 +11,7 @@ func (n *Node) setupKoa() error {
 		Port:         n.Port,
 		DebuggerPort: n.Port + 2000,
 	}
-	if err := koaApp.CreateTypescriptAppFiles(); err != nil {
+	if err := koaApp.CreateFooBarFiles(); err != nil {
 		return err
 	}
 

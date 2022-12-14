@@ -188,3 +188,5 @@ microservice
 ```yaml
 
 ```
+
+1. no javascript, only typescript

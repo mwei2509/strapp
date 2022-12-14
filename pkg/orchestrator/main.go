@@ -21,6 +21,17 @@ type Orchestrator struct {
 }
 
 func (o *Orchestrator) init() error {
+	// create in memory "strapprc" from flags
+	// if strapprc already exists, ask permission to overwrite
+	// > if Y - overwrite strapprc
+	// > if N - ask to read from strapprc
+	// > > if Y - overwrite strapprc
+	// > > if N - exit
+	// read config from strapRC
+
+	// if strapprc exists, read from it
+
+	// if nothing exists, create a default + prompt ok to continue
 	o.Flags.SetDefaults()
 	// validations / config
 	return nil
@@ -28,21 +39,26 @@ func (o *Orchestrator) init() error {
 
 type Flag struct {
 	Type      []string
-	Language  string
-	Framework string
-	Wonky     string
+	Language  []string
+	Framework []string
+	Orm       []string
+	Database  string
+	Cicd      string
 }
 
 func (f *Flag) SetDefaults() {
-	if f.Wonky == "" {
-		f.Wonky = "i am wonky"
-	}
+	// if f.Wonky == "" {
+	// 	f.Wonky = "i am wonky"
+	// }
 }
 
 var FlagDefaults Flag = Flag{
 	Type:      []string{"api"},
-	Language:  "typescript",
-	Framework: "express",
+	Language:  []string{"typescript"},
+	Framework: []string{"koa"},
+	Orm:       []string{},
+	Database:  "",
+	Cicd:      "",
 }
 
 func Do(directory string, flags Flag) error {
@@ -58,13 +74,13 @@ func Do(directory string, flags Flag) error {
 		return err
 	}
 
-	// create project directory
-	if err := o.createAppDirectory(); err != nil {
+	// set app configs
+	if err := o.setConfig(); err != nil {
 		return err
 	}
 
-	// set app configs
-	if err := o.setConfig(); err != nil {
+	// create project directory
+	if err := o.createAppDirectory(); err != nil {
 		return err
 	}
 
