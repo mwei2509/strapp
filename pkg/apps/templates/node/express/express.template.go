@@ -1,4 +1,4 @@
-package templates
+package express
 
 import (
 	"os"
@@ -15,7 +15,7 @@ const port = {{.Port}};
 app.use(express.json());
 app.use(router);
 
-app.listen(port, () => console.log(` + "`" + `application started at ${{"{"}}{{.Port}}{{"}"}}` + "`" + `));
+app.listen(port, () => console.log(` + "`" + `application started at ${port}` + "`" + `));
 `
 
 // if i need to create console.log(`something ${whatever}`)

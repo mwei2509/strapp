@@ -1,12 +1,11 @@
 package cmd
 
 import (
-	"github.com/mwei2509/strapp/pkg"
-	"github.com/mwei2509/strapp/pkg/app"
+	"github.com/mwei2509/strapp/pkg/orchestrator"
 	"github.com/spf13/cobra"
 )
 
-var flags app.Flag
+var flags orchestrator.Flag
 var languageFlag string
 
 // appCreateCommand represents the app:create command
@@ -23,7 +22,7 @@ Examples:
 `,
 	Args: cobra.MatchAll(cobra.ExactArgs(1)),
 	Run: func(cmd *cobra.Command, args []string) {
-		if err := pkg.CreateApp(args[0], flags); err != nil {
+		if err := orchestrator.Do(args[0], flags); err != nil {
 			Fatal(err)
 			return
 		}
@@ -34,7 +33,7 @@ Examples:
 func init() {
 	rootCmd.AddCommand(appCreateCommand)
 	// flags
-	appCreateCommand.Flags().StringArrayVarP(&flags.Type, "type", "t", app.FlagDefaults.Type, "type of app, e.g. api, web.  Use multiple for monorepo setup")
-	appCreateCommand.Flags().StringVarP(&flags.Language, "language", "l", app.FlagDefaults.Language, "language")
-	appCreateCommand.Flags().StringVarP(&flags.Framework, "framework", "f", app.FlagDefaults.Framework, "framework")
+	appCreateCommand.Flags().StringArrayVarP(&flags.Type, "type", "t", orchestrator.FlagDefaults.Type, "type of app, e.g. api, web.  Use multiple for monorepo setup")
+	appCreateCommand.Flags().StringVarP(&flags.Language, "language", "l", orchestrator.FlagDefaults.Language, "language")
+	appCreateCommand.Flags().StringVarP(&flags.Framework, "framework", "f", orchestrator.FlagDefaults.Framework, "framework")
 }

@@ -109,3 +109,82 @@ strapp app:create \
   -t api -l go -d postgres \
   -t web -l typescript -f react
 ```
+
+## TYPES of apps
+
+1. _Foo Bar Api_, `foo-bar-api` - basic api that has one endpoint that returns a single endpoint that returns `{ "foo": "bar" }`.
+
+2. _Get Weather App_, `get-weather-app` - basic api that has one endpoint that returns the weather (from https://openweathermap.org/api) and a web app that displays the weather
+
+3. _Hello World Web_, `hello-world-web` - basic web app that has one view that says "Hello World"
+
+4. _Create Users Web App_, `create-users-with-login` - basic api + web that has a way to create users and for users to login. Comes with a db and orm.
+
+5. _Create Users API_, `create-users-api` - basic MVC type application that includes a database and orm
+
+scenarios:
+
+- if an API application has no ORM or database and no web, create a `foo-bar-api`
+- if an API application has a database and no web, create a `create-users-api` (use sequelize if no ORM is stated)
+- if an API application has a database AND web, create a `create-users-with-login` app
+- If an API application has no ORM or database but has a web, create a `get-weather-app`
+- If a Web application has no API, create `hello-world-app`
+
+# sample .strapprc
+
+single application
+
+```yaml
+name: my-app
+services:
+  - name: my-app # same as top level name
+    type: rest-api
+    language: typescript
+    framework: koa
+    orm: sequelize
+    datastores:
+      - my-db
+    deployment: heroku
+datastores:
+  my-db:
+    type: postgresql-db
+    deployment: heroku
+cicd: circleci
+```
+
+monorepo
+
+```yaml
+name: my-app
+type: monorepo | microservice
+# microservice will break services into separate repos within main directory
+# monorepo will keep it all in one place
+services:
+  - name: backend-service
+    type: rest-api
+    language: typescript
+    framework: koa
+    orm: sequelize
+    deployment: aws
+    datastores:
+      - my-db
+  - name: frontend-service
+    type: frontend
+    language: typescript
+    framework: react
+    css: tailwind
+    state_management: redux
+    deployment: surge
+datastores:
+  my-db:
+    type: postgresql-db
+    deployment: aws
+cicd: circleci
+# maybe include terraform stuff
+```
+
+microservice
+
+```yaml
+
+```
