@@ -11,8 +11,6 @@ import (
 )
 
 func CreateNewTag(increment string, message string) error {
-	fmt.Println("hi", increment)
-
 	cmd := "git tag | grep v | xargs"
 	out, err := exec.Command("bash", "-c", cmd).Output()
 	if err != nil {
