@@ -1,6 +1,4 @@
-# WIP for strapp.sh
-
-- wip - still in concept / experiment stage\*
+# strapp cli
 
 # Usage
 
@@ -25,7 +23,9 @@ $ strapp repo:create-next-tag
  [[ STRAPP ]]  [cmd]  Success!
 ```
 
-# STRAPP, a cli for boot(strapp)ing apps
+# WIP: Boot(strapp)ing apps
+
+- wip - still in concept / experiment stage\*
 
 Strapp is a command line interface that scaffolds your application from source code structure to deployments, taking care of containerizations, datastores, continuous integration and everything in between.
 
