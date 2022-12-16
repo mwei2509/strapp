@@ -25,12 +25,17 @@ var settings NodeSettings = NodeSettings{
 
 func (n *Node) CreateNodeApp() error {
 	// all node apps should have a src directory
-	err := os.MkdirAll(n.Directory+"/src", 0755)
-	if err != nil && !os.IsExist(err) {
-		return err
+	if n.Framework != "react" {
+		err := os.MkdirAll(n.Directory+"/src", 0755)
+		if err != nil && !os.IsExist(err) {
+			return err
+		}
 	}
 
 	// all node apps will be on node 18
+	if err := n.setNodeDependencies(); err != nil {
+		return err
+	}
 
 	// framework
 	if err := n.createFramework(); err != nil {

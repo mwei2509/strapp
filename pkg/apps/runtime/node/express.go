@@ -5,7 +5,6 @@ import (
 	"os/exec"
 
 	"github.com/mwei2509/strapp/pkg/apps/templates/node/express"
-	// "github.com/mwei2509/strapp/pkg/templates"
 )
 
 /* EXPRESS */

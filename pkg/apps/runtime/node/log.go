@@ -13,8 +13,8 @@ func getPrefix(name string) utility.PkgPrefix {
 		Name:  "[node::" + name + "]",
 	}
 }
-func (n *Node) Log(args ...any) {
 
+func (n *Node) Log(args ...any) {
 	utility.Log(getPrefix(n.Name), args...)
 }
 
