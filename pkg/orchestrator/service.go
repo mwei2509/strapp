@@ -3,7 +3,7 @@ package orchestrator
 import (
 	"os"
 
-	"github.com/mwei2509/strapp/pkg/apps/runtime/node"
+	"github.com/mwei2509/strapp/pkg/apps/node"
 )
 
 type Service struct {
@@ -15,8 +15,8 @@ type Service struct {
 	Language        string
 	Framework       string
 	Css             string
-	StateManagement string
-	Deployment      string
+	StateManagement string `yaml:"state_management,omitempty"`
+	Deployment      string `yaml:"deployment,omitempty"`
 	Orm             string
 	Datastores      []string
 }

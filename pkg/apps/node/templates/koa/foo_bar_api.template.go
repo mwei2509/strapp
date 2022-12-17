@@ -1,6 +1,8 @@
 package koa
 
-import "text/template"
+import (
+	"text/template"
+)
 
 var tsconfig string = `
 {
@@ -20,54 +22,54 @@ var tsconfig string = `
 }
 `
 
-var packageJson string = `
-{
-  "name": "foo-bar-api",
-  "version": "1.0.0",
-  "description": "a foo bar api",
-  "main": "dist/server.js",
-  "scripts": {
-    "test": "jest",
-    "lint": "npx eslint .",
-    "build": "npx tsc",
-    "start": "node dist/server.js",
-    "start:dev": "./node_modules/nodemon/bin/nodemon.js --watch './**/*.ts' --exec 'ts-node' src/server.ts -- --inspect=0.0.0.0:{{.DebuggerPort}}"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "@koa/router": "^12.0.0",
-    "dotenv": "^16.0.3",
-    "koa": "^2.14.1",
-    "koa-bodyparser": "^4.3.0",
-    "koa-json": "^2.0.2",
-    "koa-logger": "^3.2.1",
-    "koa-router": "^12.0.0"
-  },
-  "devDependencies": {
-    "@types/jest": "^29.2.4",
-    "@types/koa__router": "^12.0.0",
-    "@types/koa-json": "^2.0.20",
-    "@types/koa-logger": "^3.1.2",
-    "@types/koa-router": "^7.4.4",
-    "@types/supertest": "^2.0.12",
-    "@typescript-eslint/eslint-plugin": "^5.46.1",
-    "@typescript-eslint/parser": "^5.46.1",
-    "eslint": "^8.29.0",
-    "eslint-config-airbnb-typescript": "^17.0.0",
-    "eslint-config-standard-with-typescript": "^23.0.0",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-n": "^15.6.0",
-    "eslint-plugin-promise": "^6.1.1",
-    "jest": "^29.3.1",
-    "nodemon": "^2.0.20",
-    "supertest": "^6.3.3",
-    "ts-jest": "^29.0.3",
-    "ts-node": "^10.9.1",
-    "typescript": "^4.9.4"
-  }
-}
-`
+// var packageJson string = `
+// {
+//   "name": "foo-bar-api",
+//   "version": "1.0.0",
+//   "description": "a foo bar api",
+//   "main": "dist/server.js",
+//   "scripts": {
+//     "test": "jest",
+//     "lint": "npx eslint .",
+//     "build": "npx tsc",
+//     "start": "node dist/server.js",
+//     "start:dev": "./node_modules/nodemon/bin/nodemon.js --watch './**/*.ts' --exec 'ts-node' src/server.ts -- --inspect=0.0.0.0:{{.DebuggerPort}}"
+//   },
+//   "author": "",
+//   "license": "ISC",
+//   "dependencies": {
+//     "@koa/router": "^12.0.0",
+//     "dotenv": "^16.0.3",
+//     "koa": "^2.14.1",
+//     "koa-bodyparser": "^4.3.0",
+//     "koa-json": "^2.0.2",
+//     "koa-logger": "^3.2.1",
+//     "koa-router": "^12.0.0"
+//   },
+//   "devDependencies": {
+//     "@types/jest": "^29.2.4",
+//     "@types/koa__router": "^12.0.0",
+//     "@types/koa-json": "^2.0.20",
+//     "@types/koa-logger": "^3.1.2",
+//     "@types/koa-router": "^7.4.4",
+//     "@types/supertest": "^2.0.12",
+//     "@typescript-eslint/eslint-plugin": "^5.46.1",
+//     "@typescript-eslint/parser": "^5.46.1",
+//     "eslint": "^8.29.0",
+//     "eslint-config-airbnb-typescript": "^17.0.0",
+//     "eslint-config-standard-with-typescript": "^23.0.0",
+//     "eslint-plugin-import": "^2.26.0",
+//     "eslint-plugin-n": "^15.6.0",
+//     "eslint-plugin-promise": "^6.1.1",
+//     "jest": "^29.3.1",
+//     "nodemon": "^2.0.20",
+//     "supertest": "^6.3.3",
+//     "ts-jest": "^29.0.3",
+//     "ts-node": "^10.9.1",
+//     "typescript": "^4.9.4"
+//   }
+// }
+// `
 
 var jestConfig string = `
 {
@@ -181,10 +183,25 @@ describe('Foo Bar Test Suite', () => {
 
 func (k *KoaApp) CreateFooBarFiles() error {
 	// package.json
-	tmpl, err := template.New("").Parse(packageJson)
+	// tmpl, err := template.New("").Parse(packageJson)
+	// if err != nil {
+	// 	return err
+	// }
+
+	// exPath, err := exec.CommandContext("api_base")
+	// if err != nil {
+	// 	return err
+	// }
+	// buff, err := ioutil.ReadFile(exPath + "/pkg/apps/node/templates/koa/api_base/template.package.json")
+	// if err != nil {
+	// 	return err
+	// }
+	// packageJson := string(buff)
+	tmpl, err := template.New("").ParseFiles("api_base/template.package.json")
 	if err != nil {
 		return err
 	}
+
 	if err = k.createFileFromTemplate(tmpl, "/package.json"); err != nil {
 		return err
 	}

@@ -31,8 +31,6 @@ func (o *Orchestrator) init() error {
 
 	// if strapprc exists, read from it
 
-	// if nothing exists, create a default + prompt ok to continue
-	o.Flags.SetDefaults()
 	// validations / config
 	return nil
 }
@@ -42,14 +40,9 @@ type Flag struct {
 	Language  []string
 	Framework []string
 	Orm       []string
+	Port      []int64
 	Database  string
 	Cicd      string
-}
-
-func (f *Flag) SetDefaults() {
-	// if f.Wonky == "" {
-	// 	f.Wonky = "i am wonky"
-	// }
 }
 
 var FlagDefaults Flag = Flag{
@@ -57,6 +50,7 @@ var FlagDefaults Flag = Flag{
 	Language:  []string{"typescript"},
 	Framework: []string{"koa"},
 	Orm:       []string{},
+	Port:      []int64{},
 	Database:  "",
 	Cicd:      "",
 }
@@ -95,6 +89,7 @@ func Do(directory string, flags Flag) error {
 	if err := eg.Wait(); err != nil {
 		return err
 	}
+
 	return nil
 }
 

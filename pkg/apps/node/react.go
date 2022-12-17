@@ -1,10 +1,6 @@
 package node
 
-import (
-	"fmt"
-	"os/exec"
-	// "github.com/mwei2509/strapp/pkg/templates"
-)
+// "github.com/mwei2509/strapp/pkg/templates"
 
 /* REACT */
 // func (n *Node) installReact() error {
@@ -19,14 +15,17 @@ import (
 // }
 
 func (n *Node) setupReact() error {
-	n.Log("initializing with create-react-app")
-	cmd := exec.Command("npx", "create-react-app", ".", "--template", "redux-typescript")
-	cmd.Dir = n.Directory
-	out, err := cmd.Output()
-	if err != nil {
-		return err
-	}
-	n.Log(fmt.Sprintf("%s\n", out))
+	// n.Log("initializing with create-react-app")
+	// cmd := exec.Command("npx", "create-react-app", ".", "--template", "redux-typescript")
+	// cmd.Dir = n.Directory
+	// out, err := cmd.Output()
+	// if err != nil {
+	// 	return err
+	// }
+	// n.Log(fmt.Sprintf("%s\n", out))
+	// uncomment above!
+	// !
+
 	// npx create-react-app my-app --template redux-typescript
 	// if err := n.installReact(); err != nil {
 	// 	return err

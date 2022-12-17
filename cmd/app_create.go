@@ -36,4 +36,5 @@ func init() {
 	appCreateCommand.Flags().StringArrayVarP(&flags.Type, "type", "t", orchestrator.FlagDefaults.Type, "type of app, e.g. api, web.  Use multiple for monorepo setup")
 	appCreateCommand.Flags().StringArrayVarP(&flags.Language, "language", "l", orchestrator.FlagDefaults.Language, "language")
 	appCreateCommand.Flags().StringArrayVarP(&flags.Framework, "framework", "f", orchestrator.FlagDefaults.Framework, "framework")
+	appCreateCommand.Flags().Int64SliceVarP(&flags.Port, "port", "p", orchestrator.FlagDefaults.Port, "port")
 }

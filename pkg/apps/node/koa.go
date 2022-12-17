@@ -1,7 +1,7 @@
 package node
 
 import (
-	"github.com/mwei2509/strapp/pkg/apps/templates/node/koa"
+	"github.com/mwei2509/strapp/pkg/apps/node/templates/koa"
 )
 
 func (n *Node) setupKoa() error {

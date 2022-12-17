@@ -1,16 +1,18 @@
 package orchestrator
 
 import (
+	"bytes"
 	"strings"
+
+	"gopkg.in/yaml.v2"
 
 	"github.com/spf13/viper"
 )
 
 type Config struct {
-	Services   []Service `mapstructure:"services"`
-	Datastores []struct {
-	} `mapstructure:"datastores"`
-	Cicd string `mapstructure:"cicd"`
+	Services   []Service  `mapstructure:"services"`
+	Datastores []struct{} `mapstructure:"datastores" yaml:"datastores,omitempty"`
+	Cicd       string     `mapstructure:"cicd"`
 }
 
 func (o *Orchestrator) setConfig() error {
@@ -29,9 +31,14 @@ func (o *Orchestrator) setConfig() error {
 		return err
 	}
 
+	// formatting
 	o.Config.Cicd = strings.ToLower(o.Config.Cicd)
-
 	o.setServiceConfig()
+
+	// rewriting config with format
+	config, _ := yaml.Marshal(o.Config)
+	viper.ReadConfig(bytes.NewBuffer([]byte(config)))
+	viper.WriteConfig()
 
 	return nil
 }
@@ -50,7 +57,7 @@ func (o *Orchestrator) setServiceConfig() {
 		o.Config.Services[i].Directory = directory
 		o.Config.Services[i].IsRootApp = isSingleApp
 		o.Config.Services[i].Type = strings.ToLower(v.Type)
-		o.Config.Services[i].Port = assignPort(o.Config.Services[i].Type)
+		o.Config.Services[i].Port = assignPort(o.Config.Services[i].Type, o.Config.Services[i].Port)
 		o.Config.Services[i].Name = strings.ToLower(v.Name)
 		o.Config.Services[i].Language = strings.ToLower(v.Language)
 		o.Config.Services[i].Framework = strings.ToLower(v.Framework)
@@ -79,10 +86,16 @@ type Ports struct {
 
 var ports Ports
 
-func assignPort(portType string) int64 {
+func assignPort(portType string, requested int64) int64 {
 	var port int64
+	if requested != 0 {
+		port = requested
+	}
 	switch portType {
-	case "rest-api":
+	case "api":
+		if port != 0 {
+			ports.apiPorts = append(ports.apiPorts, port)
+		}
 		// take last port + increment + push
 		if len(ports.apiPorts) == 0 {
 			port = 3000
@@ -91,6 +104,9 @@ func assignPort(portType string) int64 {
 		}
 		ports.apiPorts = append(ports.apiPorts, port)
 	case "frontend":
+		if port != 0 {
+			ports.webPorts = append(ports.webPorts, port)
+		}
 		if len(ports.webPorts) == 0 {
 			port = 8000
 		} else {
@@ -98,6 +114,9 @@ func assignPort(portType string) int64 {
 		}
 		ports.webPorts = append(ports.webPorts, port)
 	case "database":
+		if port != 0 {
+			ports.dbPorts = append(ports.dbPorts, port)
+		}
 		if len(ports.dbPorts) == 0 {
 			port = 5432
 		} else {
@@ -109,6 +128,6 @@ func assignPort(portType string) int64 {
 }
 
 // write after setting
-func writeConf() error {
+func writeConf(config Config) error {
 	return nil
 }
