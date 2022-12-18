@@ -8,8 +8,6 @@ var packageJson string = `    "rollback": "npx sequelize-cli db:migrate:undo:all
     "seed-rollback": "npx sequelize-cli db:seed:undo:all"`
 
 var sequelizerc string = `
-// .sequelizerc
-
 const path = require('path');
 
 module.exports = {

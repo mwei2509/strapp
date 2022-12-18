@@ -1,0 +1,12 @@
+FROM node:18.12-bullseye-slim
+
+# install
+COPY ./{{.Name}}/package*.json /app/
+WORKDIR /app
+RUN npm ci --omit=optional
+COPY ./{{.Name}} /app
+
+# build
+RUN npm run build
+
+CMD ["npm", "start"]

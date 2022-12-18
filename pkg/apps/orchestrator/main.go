@@ -9,12 +9,14 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/mwei2509/strapp/pkg/ops"
 	"golang.org/x/sync/errgroup"
 )
 
 type Orchestrator struct {
+	Name      string
 	Directory string
 	Flags     Flag
 	Config    Config
@@ -63,7 +65,19 @@ func Do(directory string, flags Flag) error {
 	}
 
 	// init the app orchestrator
-	o := Orchestrator{Directory: directory, Flags: flags}
+	var name string
+	if directory != "." {
+		nameSlice := strings.Split(directory, "/")
+		name = nameSlice[len(nameSlice)-1]
+	} else {
+		path, err := os.Getwd()
+		if err != nil {
+			return err
+		}
+		nameSlice := strings.Split(path, "/")
+		name = nameSlice[len(nameSlice)-1]
+	}
+	o := Orchestrator{Name: name, Directory: directory, Flags: flags}
 	if err := o.init(); err != nil {
 		return err
 	}
@@ -78,6 +92,11 @@ func Do(directory string, flags Flag) error {
 		return err
 	}
 
+	// start docker compose
+	if err := o.Config.DockerCompose.WriteDockerCompose(); err != nil {
+		return err
+	}
+
 	// init services
 	eg := new(errgroup.Group)
 	for i := 0; i < len(o.Config.Services); i++ {
@@ -89,6 +108,8 @@ func Do(directory string, flags Flag) error {
 	if err := eg.Wait(); err != nil {
 		return err
 	}
+
+	// init docker
 
 	return nil
 }

@@ -37,7 +37,8 @@ $ strapp repo:create-next-tag
 This commands builds and starts the lambda (with a Dockerfile) when run in the directory of the lambda.
 
 flags:
-`--port`, `-p` defaults to `8080`
+
+- `--port`, `-p` defaults to `8080`
 
 # WIP: Boot(strapp)ing apps
 

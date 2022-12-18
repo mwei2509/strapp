@@ -8,11 +8,14 @@ import (
 )
 
 type Node struct {
-	Name      string
-	Port      int64
-	Directory string
-	Language  string
-	Framework string
+	Name         string
+	Port         int64
+	DebuggerPort int64
+	Directory    string
+	Language     string
+	Framework    string
+	Databases    []string
+	Orm          string
 }
 
 type NodeSettings struct {
@@ -24,6 +27,10 @@ var settings NodeSettings = NodeSettings{
 }
 
 func (n *Node) CreateNodeApp() error {
+	if len(n.Databases) > 0 {
+		// do sonething
+	}
+
 	// all node apps should have a src directory
 	if n.Framework != "react" {
 		err := os.MkdirAll(n.Directory+"/src", 0755)
@@ -42,7 +49,8 @@ func (n *Node) CreateNodeApp() error {
 		return err
 	}
 
-	//
+	// update docker compose with service stuff?
+
 	return nil
 }
 

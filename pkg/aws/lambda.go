@@ -7,6 +7,7 @@ import (
 	"strings"
 )
 
+// https://docs.aws.amazon.com/lambda/latest/dg/images-test.html
 func LambdaBuildSandbox(port string) error {
 	// assume we're logged into aws already
 	// assume aws is installed
@@ -25,7 +26,7 @@ func LambdaBuildSandbox(port string) error {
 	}
 
 	Log("finished building, starting up sandbox on port " + port)
-	Log("run requests in another tab")
+	Log("run POST requests to http://localhost:" + port + "/2015-03-31/functions/function/invocations")
 	cmd = exec.Command("bash", "-c", "docker run --rm -p "+port+":"+port+" projections")
 	if err := runCommandLogOutput(cmd); err != nil {
 		return err

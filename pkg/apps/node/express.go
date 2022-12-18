@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os/exec"
 
-	"github.com/mwei2509/strapp/pkg/apps/node/templates/express"
+	"github.com/mwei2509/strapp/pkg/apps/templates/files/express"
 )
 
 /* EXPRESS */

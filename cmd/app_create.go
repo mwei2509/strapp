@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/mwei2509/strapp/pkg/orchestrator"
+	"github.com/mwei2509/strapp/pkg/apps/orchestrator"
 	"github.com/spf13/cobra"
 )
 
