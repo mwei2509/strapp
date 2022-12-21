@@ -4,7 +4,6 @@ import (
 	"embed"
 	"text/template"
 
-	"fmt"
 	"io/fs"
 	"strings"
 )
@@ -24,7 +23,6 @@ func LoadTemplates(root string) (map[string]*template.Template, error) {
 	}
 
 	if err := fs.WalkDir(files, "files/"+root, func(path string, d fs.DirEntry, err error) error {
-		fmt.Println(path)
 		if d.IsDir() {
 			return nil
 		}

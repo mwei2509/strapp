@@ -61,12 +61,12 @@ func (dc *DockerCompose) ReadDockerCompose() error {
 	return nil
 }
 
-func (dc *DockerCompose) WriteDockerCompose() error {
+func (dc *DockerCompose) WriteDockerCompose(directory string) error {
 	dockerCompose, err := yaml.Marshal(dc)
 	if err != nil {
 		return err
 	}
-	err = ioutil.WriteFile("docker-compose.yml", dockerCompose, 0644)
+	err = ioutil.WriteFile(directory+"/docker-compose.yml", dockerCompose, 0644)
 	if err != nil {
 		return err
 	}

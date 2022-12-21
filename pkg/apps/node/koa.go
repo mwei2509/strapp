@@ -8,6 +8,7 @@ import (
 )
 
 func (n *Node) setupKoa() error {
+	n.Log("loading templates...")
 	templates, err := templates.LoadTemplates("koa/api_base")
 	if err != nil {
 		return err
@@ -18,6 +19,7 @@ func (n *Node) setupKoa() error {
 		}
 	}
 
+	n.Log("installing...")
 	if err := n.npmInstall(); err != nil {
 		return err
 	}

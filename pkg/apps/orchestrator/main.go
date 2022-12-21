@@ -34,6 +34,16 @@ func (o *Orchestrator) init() error {
 	// if strapprc exists, read from it
 
 	// validations / config
+	if _, err := os.Stat(o.Directory + "/.strapprc"); os.IsNotExist(err) {
+		o.Config.Services = make([]Service, 0)
+		for i, v := range o.Flags.Type {
+			o.Config.Services = append(o.Config.Services, Service{
+				Type:      v,
+				Language:  o.Flags.Language[i],
+				Framework: o.Flags.Framework[i],
+			})
+		}
+	}
 	return nil
 }
 
@@ -44,7 +54,6 @@ type Flag struct {
 	Orm       []string
 	Port      []int64
 	Database  string
-	Cicd      string
 }
 
 var FlagDefaults Flag = Flag{
@@ -53,8 +62,6 @@ var FlagDefaults Flag = Flag{
 	Framework: []string{"koa"},
 	Orm:       []string{},
 	Port:      []int64{},
-	Database:  "",
-	Cicd:      "",
 }
 
 func Do(directory string, flags Flag) error {
@@ -82,18 +89,19 @@ func Do(directory string, flags Flag) error {
 		return err
 	}
 
-	// set app configs
-	if err := o.setConfig(); err != nil {
-		return err
-	}
-
 	// create project directory
 	if err := o.createAppDirectory(); err != nil {
 		return err
 	}
 
+	// set app configs
+	if err := o.setConfig(); err != nil {
+		return err
+	}
+
 	// start docker compose
-	if err := o.Config.DockerCompose.WriteDockerCompose(); err != nil {
+	o.Log("setting up docker...")
+	if err := o.Config.DockerCompose.WriteDockerCompose(o.Directory); err != nil {
 		return err
 	}
 

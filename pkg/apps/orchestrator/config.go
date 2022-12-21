@@ -3,6 +3,7 @@ package orchestrator
 import (
 	"bytes"
 	"fmt"
+	"os"
 	"strings"
 
 	"gopkg.in/yaml.v2"
@@ -19,6 +20,15 @@ type Config struct {
 }
 
 func (o *Orchestrator) setConfig() error {
+	o.Log(o.Directory)
+	if _, err := os.Stat(o.Directory + "/.strapprc"); os.IsNotExist(err) {
+		o.Log("creating config")
+		_, err = os.Create(o.Directory + "/.strapprc")
+		if err != nil {
+			return err
+		}
+	}
+
 	// get conf from conf file
 	viper.SetConfigName(".strapprc")
 	viper.SetConfigType("yaml")
@@ -131,6 +141,7 @@ func (o *Orchestrator) setDockerComposeConfig() {
 		service.Volumes = []string{
 			v.Directory + ":/app:delegated",
 		}
+		o.Config.DockerCompose.Services[name] = service
 	}
 }
 
@@ -149,7 +160,6 @@ var ports Ports
 
 func assignPort(portType string, requested int64) int64 {
 	var port int64
-	ops.Log(portType, requested, port)
 	if requested != 0 {
 		port = requested
 	}
