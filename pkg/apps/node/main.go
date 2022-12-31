@@ -1,29 +1,22 @@
 package node
 
 import (
-	"fmt"
 	"os"
-	"os/exec"
 	"strings"
+
+	"github.com/mwei2509/strapp/pkg/ops"
 )
 
 type Node struct {
-	Name         string
-	Port         int64
-	DebuggerPort int64
-	Directory    string
-	Language     string
-	Framework    string
-	Databases    []string
-	Orm          string
-}
-
-type NodeSettings struct {
-	Version string
-}
-
-var settings NodeSettings = NodeSettings{
-	Version: "18",
+	Name             string
+	Port             int64
+	DebuggerPort     int64
+	ContextDirectory string
+	Directory        string
+	Language         string
+	Framework        string
+	Databases        []string
+	Orm              string
 }
 
 func (n *Node) CreateNodeApp() error {
@@ -40,7 +33,7 @@ func (n *Node) CreateNodeApp() error {
 	}
 
 	// all node apps will be on node 18
-	if err := n.setNodeDependencies(); err != nil {
+	if err := ops.InstallNode(); err != nil {
 		return err
 	}
 
@@ -51,17 +44,6 @@ func (n *Node) CreateNodeApp() error {
 
 	// update docker compose with service stuff?
 
-	return nil
-}
-
-func (n *Node) npmInstall() error {
-	cmd := exec.Command("npm", "install")
-	cmd.Dir = n.Directory
-	out, err := cmd.Output()
-	if err != nil {
-		return err
-	}
-	n.Log(fmt.Sprintf("%s\n", out))
 	return nil
 }
 

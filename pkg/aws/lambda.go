@@ -1,10 +1,10 @@
 package aws
 
 import (
-	"bufio"
 	"os"
-	"os/exec"
 	"strings"
+
+	u "github.com/mwei2509/strapp/pkg/utility"
 )
 
 // https://docs.aws.amazon.com/lambda/latest/dg/images-test.html
@@ -20,31 +20,14 @@ func LambdaBuildSandbox(port string) error {
 	pathArr := strings.Split(path, "/")
 	dir := pathArr[len(pathArr)-1]
 
-	cmd := exec.Command("bash", "-c", "docker build -t "+dir+" .")
-	if err := runCommandLogOutput(cmd); err != nil {
+	if err := u.RunCommandLogOutput("docker build -t " + dir + " ."); err != nil {
 		return err
 	}
 
-	Log("finished building, starting up sandbox on port " + port)
-	Log("run POST requests to http://localhost:" + port + "/2015-03-31/functions/function/invocations")
-	cmd = exec.Command("bash", "-c", "docker run --rm -p "+port+":"+port+" projections")
-	if err := runCommandLogOutput(cmd); err != nil {
+	log.Log("finished building, starting up sandbox on port " + port)
+	log.Log("run POST requests to http://localhost:" + port + "/2015-03-31/functions/function/invocations")
+	if err := u.RunCommandLogOutput("docker run --rm -p " + port + ":" + port + " projections"); err != nil {
 		return err
 	}
-	return nil
-}
-
-func runCommandLogOutput(cmd *exec.Cmd) error {
-	pipe, _ := cmd.StderrPipe()
-	if err := cmd.Start(); err != nil {
-		return err
-	}
-	reader := bufio.NewReader(pipe)
-	line, err := reader.ReadString('\n')
-	for err == nil {
-		Log(line)
-		line, err = reader.ReadString('\n')
-	}
-	cmd.Wait()
 	return nil
 }

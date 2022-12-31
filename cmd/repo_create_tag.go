@@ -22,10 +22,10 @@ Examples:
 		message, _ := cmd.Flags().GetString("message")
 
 		if err := repo.CreateNewTag(increment, message); err != nil {
-			Fatal(err)
+			log.Fatal(err)
 			return
 		}
-		Log("Success!")
+		log.Log("Success!")
 	},
 }
 

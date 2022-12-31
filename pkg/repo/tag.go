@@ -2,17 +2,17 @@ package repo
 
 import (
 	"fmt"
-	"os/exec"
 	"strings"
 
 	"sort"
 
 	"github.com/masterminds/semver"
+	"github.com/mwei2509/strapp/pkg/utility"
 )
 
 func CreateNewTag(increment string, message string) error {
 	cmd := "git tag | grep v | xargs"
-	out, err := exec.Command("bash", "-c", cmd).Output()
+	out, err := utility.RunCommand(cmd)
 	if err != nil {
 		return err
 	}
@@ -45,20 +45,18 @@ func CreateNewTag(increment string, message string) error {
 
 	// create tag
 	cmd = "git tag -a " + nextVersion.Original() + ` -m "` + message + `"`
-	Log(cmd)
-	out, err = exec.Command("bash", "-c", cmd).Output()
-	if err != nil {
+	log.Log(cmd)
+	if _, err = utility.RunCommand(cmd); err != nil {
 		return err
 	}
-	Log(nextVersion.Original(), "tag created")
+	log.Log(nextVersion.Original(), "tag created")
 
 	// push tag
 	cmd = "git push origin " + nextVersion.Original()
-	Log(cmd)
-	out, err = exec.Command("bash", "-c", cmd).Output()
-	if err != nil {
+	log.Log(cmd)
+	if _, err = utility.RunCommand(cmd); err != nil {
 		return err
 	}
-	Log(nextVersion.Original(), "tag pushed")
+	log.Log(nextVersion.Original(), "tag pushed")
 	return nil
 }

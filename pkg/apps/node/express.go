@@ -1,26 +1,14 @@
 package node
 
 import (
-	"fmt"
-	"os/exec"
-
-	"github.com/mwei2509/strapp/pkg/apps/templates/files/express"
+	"github.com/mwei2509/strapp/pkg/ops"
+	"github.com/mwei2509/strapp/pkg/templates/files/express"
 )
 
 /* EXPRESS */
-func (n *Node) installExpress() error {
-	cmd := exec.Command("npm", "install", "express")
-	cmd.Dir = n.Directory
-	out, err := cmd.Output()
-	if err != nil {
-		return err
-	}
-	n.Log(fmt.Sprintf("%s\n", out))
-	return nil
-}
 
 func (n *Node) setupExpress() error {
-	if err := n.installExpress(); err != nil {
+	if err := ops.NpmInstallPkg(n.Directory, "express"); err != nil {
 		return err
 	}
 

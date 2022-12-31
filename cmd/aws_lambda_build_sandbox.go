@@ -19,10 +19,10 @@ Examples:
 		port, _ := cmd.Flags().GetString("port")
 
 		if err := aws.LambdaBuildSandbox(port); err != nil {
-			Fatal(err)
+			log.Fatal(err)
 			return
 		}
-		Log("Success!")
+		log.Log("Success!")
 	},
 }
 

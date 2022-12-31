@@ -3,16 +3,17 @@ package orchestrator
 import (
 	"bytes"
 	"fmt"
-	"os"
 	"strings"
 
 	"gopkg.in/yaml.v2"
 
-	"github.com/mwei2509/strapp/pkg/ops"
+	ops "github.com/mwei2509/strapp/pkg/ops"
+	u "github.com/mwei2509/strapp/pkg/utility"
 	"github.com/spf13/viper"
 )
 
 type Config struct {
+	TemplateType  string
 	Services      []Service  `mapstructure:"services"`
 	Databases     []Database `mapstructure:"databases" yaml:"databases,omitempty"`
 	Cicd          struct{}   `mapstructure:"cicd"`
@@ -20,27 +21,8 @@ type Config struct {
 }
 
 func (o *Orchestrator) setConfig() error {
-	o.Log(o.Directory)
-	if _, err := os.Stat(o.Directory + "/.strapprc"); os.IsNotExist(err) {
-		o.Log("creating config")
-		_, err = os.Create(o.Directory + "/.strapprc")
-		if err != nil {
-			return err
-		}
-	}
-
-	// get conf from conf file
-	viper.SetConfigName(".strapprc")
-	viper.SetConfigType("yaml")
-	viper.AddConfigPath(o.Directory)
-	err := viper.MergeInConfig()
-
-	if err != nil {
-		return err
-	}
-
-	// write conf to struct
-	if err = viper.Unmarshal(&o.Config); err != nil {
+	// set up strapprc and read values into o.Config
+	if err := u.SetupStrapprcConfig(o.Directory, &o.Config); err != nil {
 		return err
 	}
 
@@ -65,12 +47,25 @@ func (o *Orchestrator) setServicesConfig() {
 
 	// port tracking
 	for i, v := range o.Config.Services {
+		name := strings.ToLower(v.Name)
+		if name == "" {
+			// if name is empty, check if it is a single app, if it IS a single app, set it to the main app name
+			if isSingleApp {
+				name = o.Name
+			} else {
+				// set it to the type
+				name = strings.ToLower(v.Type)
+			}
+		}
 		directory := o.Directory
+		contextDirectory := "."
 		if !isSingleApp {
-			directory = o.Directory + "/" + v.Name
+			contextDirectory = "./" + name
+			directory = o.Directory + "/" + name
 		}
 		serviceType := strings.ToLower(v.Type)
 		o.Config.Services[i].Directory = directory
+		o.Config.Services[i].ContextDirectory = contextDirectory
 		o.Config.Services[i].IsRootApp = isSingleApp
 		o.Config.Services[i].Type = serviceType
 		port := assignPort(serviceType, v.Port)
@@ -78,7 +73,7 @@ func (o *Orchestrator) setServicesConfig() {
 		if strings.ToLower(serviceType) == "api" {
 			o.Config.Services[i].DebuggerPort = port + 2000
 		}
-		o.Config.Services[i].Name = strings.ToLower(v.Name)
+		o.Config.Services[i].Name = name
 		o.Config.Services[i].Language = strings.ToLower(v.Language)
 		o.Config.Services[i].Framework = strings.ToLower(v.Framework)
 		o.Config.Services[i].Css = strings.ToLower(v.Css)
@@ -91,6 +86,10 @@ func (o *Orchestrator) setServicesConfig() {
 			o.Config.Services[i].Databases[id] = strings.ToLower(v)
 		}
 	}
+}
+
+func (o *Orchestrator) setTemplateType() {
+
 }
 
 func (o *Orchestrator) setDatabasesConfig() {
@@ -126,21 +125,21 @@ func (o *Orchestrator) setDockerComposeConfig() {
 		}
 		o.Config.DockerCompose.Services[dbName] = dbService
 	}
+
 	for _, v := range o.Config.Services {
 		service := ops.DockerComposeService{}
 		name := strings.ToLower(v.Name)
 		service.ContainerName = name
 		service.Build.Context = "."
-		service.Build.Dockerfile = v.Directory + "/Dockerfile"
+		service.Build.Dockerfile = v.ContextDirectory + "/Dockerfile"
 		service.Environment = make(map[string]string)
 		service.Environment["PORT"] = fmt.Sprint(v.Port)
 		service.Ports = []string{fmt.Sprint(v.Port) + ":" + fmt.Sprint(v.Port)}
 		if v.DebuggerPort != 0 {
 			service.Ports = append(service.Ports, fmt.Sprint(v.DebuggerPort)+":"+fmt.Sprint(v.DebuggerPort))
 		}
-		service.Volumes = []string{
-			v.Directory + ":/app:delegated",
-		}
+		bindMount := v.ContextDirectory + ":/app:delegated"
+		service.Volumes = []string{bindMount}
 		o.Config.DockerCompose.Services[name] = service
 	}
 }

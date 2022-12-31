@@ -1,21 +1,10 @@
 package ops
 
 import (
-	"fmt"
 	"io/ioutil"
-	"os/exec"
 
 	"gopkg.in/yaml.v2"
 )
-
-func checkDockerExists() bool {
-	out, err := exec.Command("command", "-v", "docker").Output()
-	Log(fmt.Sprintf("%s\n", out))
-	if err != nil {
-		return false
-	}
-	return true
-}
 
 func installDocker() error {
 	return nil
@@ -45,7 +34,7 @@ type DockerComposeService struct {
 	Build         struct {
 		Context    string `yaml:"context,omitempty"`
 		Dockerfile string `yaml:"dockerfile,omitempty"`
-	} `yaml:"yaml,omitempty"`
+	} `yaml:"build,omitempty"`
 	Command string `yaml:"command,omitempty"`
 }
 
